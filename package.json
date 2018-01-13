@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "power_website.js",
   "dependencies": {
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "sha1": "^1.1.1"
   }
 }
