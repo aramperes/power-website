@@ -13,7 +13,6 @@ const request = require('request');
 const sha1 = require('sha1');
 
 const tokens = [];
-const sessions = {};
 
 /**
  * @param {http.ClientRequest} req
@@ -56,13 +55,6 @@ function handleOauth(req, res, path) {
         'redirect_uri': REDIRECT_URI,
         'grant_type': 'authorization_code'
     };
-    let sess_id = sha1(oauth_code);
-    sessions[sess_id] = {
-        req: req,
-        res: res,
-        path: path
-    };
-    console.log('sess: ' + sess_id);
     request.post('https://login.microsoftonline.com/common/oauth2/v2.0/token',
         {form: to_microsoft_query, header: {'power_sess': sess_id}},
         (err, _res, body) => {
@@ -70,19 +62,9 @@ function handleOauth(req, res, path) {
                 console.error(err);
                 return;
             }
-            if (!_res.headers['power_sess']) {
-                console.error('no sess!');
-                return;
-            }
-            let sess = sessions[_res.headers['power_sess']];
-            if (!sess) {
-                console.error('unknown sess');
-                return;
-            }
-            sess.res.writeHead(200, {'Content-Type': 'application/json'});
-            sess.res.write(body);
-            sess.res.end();
-            delete sessions[_res.headers['power_sess']];
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.write(body);
+            res.end();
         });
 }
 
