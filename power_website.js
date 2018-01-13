@@ -14,6 +14,11 @@ const sha1 = require('sha1');
 
 const tokens = [];
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 /**
  * @param {http.ClientRequest} req
  * @param {http.ServerResponse} res
@@ -62,8 +67,15 @@ function handleOauth(req, res, path) {
                 console.error(err);
                 return;
             }
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.write(body);
+            let contents = JSON.parse(body);
+            let headers = {'Content-Type': 'application/json'};
+            for (let key in contents) {
+                if (!contents.hasOwnProperty(key)) {
+                    continue;
+                }
+                headers['MS-' + key.replaceAll('_', '-')] = contents[key];
+            }
+            res.writeHead(_res.statusCode, headers);
             res.end();
         });
 }
