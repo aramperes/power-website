@@ -56,7 +56,7 @@ function handleOauth(req, res, path) {
         'grant_type': 'authorization_code'
     };
     request.post('https://login.microsoftonline.com/common/oauth2/v2.0/token',
-        {form: to_microsoft_query, header: {'power_sess': sess_id}},
+        {form: to_microsoft_query},
         (err, _res, body) => {
             if (err) {
                 console.error(err);
