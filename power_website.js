@@ -10,7 +10,6 @@ const REDIRECT_URI = config.auth.redirect_uri;
 const http = require('http');
 const url = require('url');
 const request = require('request');
-const sha1 = require('sha1');
 
 const tokens = [];
 
