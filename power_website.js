@@ -64,10 +64,6 @@ function handleOauth(req, res, path) {
         'grant_type': 'authorization_code'
     };
     postTokenMS(to_microsoft_query, (err, _res, body) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
         let contents = JSON.parse(body);
         let headers = {'Content-Type': 'application/json'};
         for (let key in contents) {
@@ -80,6 +76,8 @@ function handleOauth(req, res, path) {
                 headers['MS-' + key.replaceAll('_', '-')] = JSON.stringify(contents[key]);
             }
         }
+        console.log('headers: ' + JSON.stringify(_res.headers));
+        console.log('body: ' + JSON.stringify(contents));
         res.writeHead(_res.statusCode, headers);
         res.end();
     });
