@@ -76,8 +76,6 @@ function handleOauth(req, res, path) {
                 headers['MS-' + key.replaceAll('_', '-')] = JSON.stringify(contents[key]);
             }
         }
-        console.log('headers: ' + JSON.stringify(_res.headers));
-        console.log('body: ' + JSON.stringify(contents));
         res.writeHead(_res.statusCode, headers);
         res.end();
     });
